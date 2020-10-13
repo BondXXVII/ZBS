@@ -11,7 +11,7 @@ class Window < Gosu::Window
     def initialize
         super(1024, 768, false)
         @player = Player.new(self)
-        #@enemyprojectile = [enemyprojectile.new(self), enemyprojectile.new(self)]#same jus have to copy more in []  <---------change
+        #@enemyprojectile = [TheyAimBottin.new(self), TheyAimBottin.new(self)]#same jus have to copy more in []  <---------change
         @enemyprojectile = (9).times.map {TheyAimBottin.new(self)}#same as above
         @nogameover = true
         @text = Gosu::Font.new(self, Gosu::default_font_name, 20)
