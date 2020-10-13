@@ -8,9 +8,12 @@ class Rupee
         @live = true
         #@player = Player.new(self)
         #@score = Player.score
+        @start_time = 0
+        @sparkle = Gosu::Image.new('sparkle.png')
+
     end
 =begin
-    def update(firbreath)
+    def update(firebreath)
         @x = rand(@window.width) + 2
         if @x < 160
             @x += 160
@@ -32,21 +35,36 @@ class Rupee
             #@y = rand(40..700)   
         #end
         collect_by?(player)  #<-----idr why...test it !it is what deletes objects!
+        #if @live == false
+            #@y = rand(44..720)
+            #@x = rand(170..1000)
+            #@live = true
+        #end
     end
 #end    
     
     def draw
         #@rupy.draw(@x, @y, 2) #normal
         @rupy.draw_rot(@x, @y, 2, 11 * Math.sin(Gosu.milliseconds / 222.1))#<-----spins
+        if @live == false
+            #if Gosu.milliseconds/1000 - @start_time < 3
+                #@sparkle.draw(444, 444, 2)
+            #else
+            @y = rand(44..720)
+            @x = rand(170..1000)
+            @live = true
+            #end
+        end
     end
 #begin
     def collect_by?(player) #<change from hit by (in player as well)
         if Gosu::distance(player.x+44, player.y+44, @x, @y) < 42 #<------edited to have player collide instead of firebreath
             @live = false
+
             if @live == false
                 @x = 0
                 @y = 0
-
+                #@start_time = Gosu.milliseconds/1000
             end
 
             #@player.score = @player.score + 55    #<------doesnt work move test later
@@ -54,8 +72,7 @@ class Rupee
     end
 #end    
 end   
-    
-    
+
 
 
 

@@ -1,7 +1,7 @@
 require 'gosu'
 require_relative 'rupee'
 class Player
-    attr_reader :hp, :x, :y, :firebreath, :score
+    attr_reader :hp, :x, :y, :firebreath, :score, :start_time_r, :start_time_h
     def initialize(window)
         @window = window
         @walkL1, @standL, @walkL2, @walkR1, @standR, @walkR2 = Gosu::Image.load_tiles('walkLR.png', 88, 88)
@@ -17,6 +17,13 @@ class Player
         @score = 0
         #@p = 0
         @collectR = false
+        @rupAnim = false
+        @hurtAnim = false
+        @start_time_r = 0
+        @start_time_h = 0
+        @sparkle = Gosu::Image.new('sparkle.png')
+        @temp_x = 0
+        @temp_y = 0
     end
     
     def update
@@ -36,6 +43,7 @@ class Player
             @firebreath.shoot
         end
         @firebreath.update
+        #@hearttimer -= @time
     end
 
     def move_up
@@ -68,20 +76,32 @@ class Player
     end
 
     def draw
-        if @hurt
-            @damaged.draw(@x, @y, 3)
-            
-        #new
-        elsif @collectR
+        if @hurtAnim
+            if Gosu.milliseconds - @start_time_h < 300
+                @damaged.draw(@x, @y, 3)
+            else
+                @hurtAnim = false
+            end
+        #elsif @rupeAnim
+            #if @window.time - @start_time < 3    #Gosu.milliseconds/1000 - @start_time < 4
 
-            @heart.draw(@x, @y, 4) # for length of 1000 Gosu.milliseconds
-            #sleep(0.1)#<---pauses whole game...............
-
-
+                #@sparkle.draw(@x, @y, 1) # for length of 1000 Gosu.milliseconds
+            ##sleep(0.1)#<---pauses whole game...............
+            #else
+                #@rupeAnim = false
+            #end
         else
             @image.draw(@x, @y, 2)
             @firebreath.draw
         end
+        if @rupAnim
+            if Gosu.milliseconds - @start_time_r < 120
+                @sparkle.draw(@temp_x-22, @temp_y-22, 1)
+            else
+                @rupAnim = false
+            end
+        end
+
         #newwwwwwwwwwwwwww
         #(1..5).each do
             #@heart.draw(55, 55+@p, 3)#<^----all this can make clouds fly over screen etc
@@ -109,10 +129,12 @@ class Player
     end
 =end
     def hit_by?(enemyprojectile)
-        @hurt = enemyprojectile.any? {|enemyprojectile| Gosu::distance(enemyprojectile.x, enemyprojectile.y, @x+88, @y+88) < 50}
+        @hurt = enemyprojectile.any? {|enemyprojectile| Gosu::distance(enemyprojectile.x, enemyprojectile.y, @x+88, @y+88) < 42}
 
         if @hurt
             @hp = @hp - 20
+            @start_time_h = Gosu.milliseconds
+            @hurtAnim = true
             #@score += 11  #<-------------works for score
         end
     end
@@ -134,10 +156,14 @@ class Player
 #end
 #begin
     def collect_by?(rupee)
-        @collectR = rupee.any? {|rupee| Gosu::distance(rupee.x, rupee.y, @x+44, @y+44) < 44}
+        @collectR = rupee.any? {|rupee| Gosu::distance(rupee.x, rupee.y, @x+44, @y+44) < 42}
         if @collectR
             #@hp = @hp + 200 #<-----
             @score += 255 #<---------- does not work yet...  took the place of enemyprojs....fix it(back to norml if # out rup section)
+            @start_time_r = Gosu.milliseconds
+            @temp_x = @x
+            @temp_y = @y
+            @rupAnim = true
         end
     end
 #end    

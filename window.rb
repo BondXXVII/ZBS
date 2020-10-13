@@ -1,28 +1,26 @@
-#require 'gosu'
-#require_relative 'window'
-#require_relative 'player'
-#require_relative 'enemyprojectile'   #<moved window to Game so dont need these here
-#require_relative 'firebreath'
-#require_relative 'stats'
-#require_relative 'rupee'
-
 class Window < Gosu::Window
+    attr_reader :time
 
     def initialize
         super(1024, 768, false)
+        self.caption = 'Just testing to see if title works.....hi' #window title
         @player = Player.new(self)
         #@bullet = [Bullet.new(self), Bullet.new(self)]#same jus have to copy more in []  <---------change
-        @enemyprojectile = (9).times.map {TheyAimBottin.new(self)}#same as above
+        @enemyprojectile = (5).times.map {TheyAimBottin.new(self)}#same as above
         @nogameover = true
         @text = Gosu::Font.new(self, Gosu::default_font_name, 20)
         @background_image = Gosu::Image.new('bckgrd.png')
         #@stats = Status.new
         @time = 0
-        @rupee = 22.times.map {Rupee.new(self)}
+        @rupee = 3.times.map {Rupee.new(self)}
+        #@rupee = Array.new
         #new
         @pause = false
+        @title = Gosu::Image.new('title.png')
+        @rupy = Gosu::Image.new('rupee.png')
+
     end
-    
+
    
 =begin   #restructure later(stops game nad can be used for items)
     def update
@@ -59,6 +57,9 @@ class Window < Gosu::Window
         end
         if button_down?(Gosu::KbJ)
             endgame  true
+        end
+        if rand(300) < 1 and @rupee.size < 12
+            @rupee.push(Rupee.new(19824683645821658764127856120561251623))#like idek man
         end
         #if @pause == true && button_down?(Gosu::KbJ)
             #@pause = false
@@ -97,8 +98,8 @@ class Window < Gosu::Window
         live_ball.each {|enemyprojectile| enemyprojectile.draw}
         @text.draw("HP: #{@player.hp}", 10, 10, 3, 1, 1, 0xffffffff)
         @text.draw("Score: #{@player.score}", 10, 30, 3, 1, 1, 0xffffffff)   #<----------------------keep an eye on
-        @text.draw("Time: #{@time}", 10, 50, 3, 1, 1, 0xffffffff)
-        @text.draw("Pos: X-#{@player.x}  Y-#{@player.y}", 10, 70, 3, 1, 1, 0xffffffff)
+        @text.draw("Time: #{@time} RT:#{@player.start_time_r} HT:#{@player.start_time_h}", 10, 70, 3, 1, 1, 0xffffffff)
+        @text.draw("Pos: X-#{@player.x}  Y-#{@player.y}", 10, 50, 3, 1, 1, 0xffffffff)
 
         #@rup_image.draw(555, 555, 2)
         live_rup.each {|rupee| rupee.draw}

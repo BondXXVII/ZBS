@@ -24,7 +24,7 @@ class TheyAimBottin
     end
 
     def hit_by?(firebreath)
-        if Gosu::distance(firebreath.x, firebreath.y, @x-88, @y-88) < 48
+        if Gosu::distance(firebreath.x, firebreath.y, @x-88, @y-88) < 40
             @live = false
             if @live == false
                 @x = 0
