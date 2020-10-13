@@ -5,7 +5,7 @@ class Window < Gosu::Window
         super(1024, 768, false)
         self.caption = 'Just testing to see if title works.....hi' #window title
         @player = Player.new(self)
-        #@bullet = [Bullet.new(self), Bullet.new(self)]#same jus have to copy more in []  <---------change
+        #@enemyprojectile = [TheyAimBottin.new(self), TheyAimBottin.new(self)]#same jus have to copy more in []  <---------change
         @enemyprojectile = (5).times.map {TheyAimBottin.new(self)}#same as above
         @nogameover = true
         @text = Gosu::Font.new(self, Gosu::default_font_name, 20)
